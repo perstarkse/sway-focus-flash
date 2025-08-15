@@ -8,8 +8,7 @@ It subscribes to Sway IPC events and, on focus changes, runs a short, configurab
 
 - Brief opacity "flash" when focus changes
 - Customizable easing, frame time, and step count
-- Resets non-focused windows on workspace changes
-- Lightweight: no daemons, bars, or notifications required
+- Lightweight
 
 ## Install
 
@@ -26,7 +25,7 @@ install -Dm755 target/release/sway-focus-flash ~/.local/bin/sway-focus-flash
 If you use Nix with devenv/direnv, you can enter a dev shell first, then build:
 
 ```bash
-devenv shell  # or rely on direnv
+devenv shell  
 cargo build --release
 ```
 
@@ -134,7 +133,6 @@ If that command works and returns success, `sway-focus-flash` will work in your 
 
 ## Troubleshooting
 
-- No animation when switching from an empty workspace: the tool follows focus and the current workspace’s focus path. If a bar or external script delays focus, a split-second delay may occur before the flash. Try increasing `steps` or `frame-time` if your display feels too fast to notice.
 - Nothing happens at all: check that `swaymsg '[con_id=__focused__]' opacity 0.9` works, and that the binary is running (`pgrep -fa sway-focus-flash`).
 - Waybar or other tools also manipulate window visuals: disable overlapping features to avoid flicker.
 

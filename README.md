@@ -30,6 +30,31 @@ devenv shell  # or rely on direnv
 cargo build --release
 ```
 
+### Install and run with Nix (flakes)
+
+- Run directly (no install):
+
+```bash
+# Latest from GitHub
+nix run github:perstarkse/sway-focus-flash
+
+# Optionally pin a ref
+nix run github:perstarkse/sway-focus-flash?ref=main
+```
+
+- Use as a flake input in your Nix(OS)/Home Manager config:
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    sway-focus-flash.url = "github:perstarkse/sway-focus-flash";
+  };
+
+  # ... expose inputs.sway-focus-flash to your Home Manager module scope ...
+}
+```
+
 ## Usage
 
 Run the binary; it will stay in the background listening to IPC events:
@@ -38,12 +63,30 @@ Run the binary; it will stay in the background listening to IPC events:
 sway-focus-flash
 ```
 
-Add it to your Sway config to start automatically on login. For example:
+### Autostart (recommended)
+
+- Plain Sway config:
 
 ```conf
 # ~/.config/sway/config
-# Start once on session start
 exec_always --no-startup-id sway-focus-flash
+```
+
+- Home Manager (flake) inside your Sway module:
+
+```nix
+# Minimal example inside your wayland.windowManager.sway.config
+{
+  wayland.windowManager.sway = {
+    enable = true;
+    config.startup = [
+      {
+        command = "${inputs.sway-focus-flash.packages.${pkgs.system}.sway-focus-flash}/bin/sway-focus-flash";
+        always = true;
+      }
+    ];
+  };
+}
 ```
 
 ### Configuration (CLI flags)
@@ -106,3 +149,7 @@ If that command works and returns success, `sway-focus-flash` will work in your 
 ## Acknowledgements
 
 Inspired by small Sway/i3 helper tools that improve focus visibility by briefly changing window state or appearance.
+
+---
+
+Repository: [perstarkse/sway-focus-flash](https://github.com/perstarkse/sway-focus-flash)

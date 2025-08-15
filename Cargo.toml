@@ -1,0 +1,15 @@
+[package]
+name = "sway-focus-flash"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.5.41", features = ["derive"] }
+swayipc = "3"
+tokio = { version = "1", features = ["full"] }
+tokio-util = "0.7"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
